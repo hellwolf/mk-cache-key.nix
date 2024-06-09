@@ -35,10 +35,51 @@ them](test/run-test.sh).
 
 # Usage
 
-## Produce Cache Description
+## Nix Run Directly
 
 ```shell
-
+# 1) Assume you are in your git root.
+# 2) A regular file or a piped file could provide additional build context, such as status of git
+# submodules.
+$ BUILD_CONTEXT_FILE= # no additional context
+$ nix run github:hellwolf/mk-cache-key.nix -- $PWD ./. "$BUILD_CONTEXT_FILE" --json | jq
+{
+  "additionalContext": "",
+  "closure": [
+    {
+      "dependencies": [],
+      "ignoredFiles": [],
+      "includedFiles": [
+        {
+          "type": "path",
+          "value": "./flake.nix"
+        },
+        {
+          "type": "path",
+          "value": "./flake.lock"
+        },
+        {
+          "type": "path",
+          "value": "./package.json"
+        },
+        {
+          "type": "path",
+          "value": "./bun.lockb"
+        }
+      ],
+      "modulePath": "./.",
+      "outputs": []
+    }
+  ],
+  "files": [
+    "./bun.lockb",
+    "./flake.lock",
+    "./flake.nix",
+    "./package.json"
+  ],
+  "hash": "6d44af219824a3d1bb1ab877a4e6e66f36ec33c813e91a4b6a8f5ec8df4af569",
+  "outputs": []
+}
 ```
 
 ## Using Flake
@@ -67,4 +108,12 @@ To use this, and include the git submodule status as part of the build context:
 } > additional-build-context.ignored
 
 mk-cache-key.nix "$PWD" "$modulePath" ./additional-build-context.ignored --json
+```
+
+## Direct Usage
+
+```shell
+# You may need to define _MK_CACHE_KEY_NIX_DIST_DIR if it cannot be inferred.
+$ source $_MK_CACHE_KEY_NIX_DIST_DIR/lib.sh
+$ mk_cache_key_json "$_GITDIR" "$HALF_BOARD_NIX_MODULE_PATH" "$BUILD_CONTEXT_FILE"
 ```
