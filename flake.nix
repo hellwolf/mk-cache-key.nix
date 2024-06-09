@@ -16,7 +16,7 @@
       system:
       let
         pkgs = import nixpkgs { inherit system; };
-        defaultPackage = pkgs.writeShellScript "mk-cache-key.nix" ''
+        defaultPackage = pkgs.writeShellScriptBin "mk-cache-key.nix" ''
           export _MK_CACHE_KEY_NIX_DIST_DIR=${./.}
           source ${./lib.sh}
           mk_cache_key "$@"
