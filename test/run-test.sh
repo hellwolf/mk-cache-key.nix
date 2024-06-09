@@ -13,8 +13,12 @@ source "$_D"/../lib.sh
 
 # Test Cases
 
+_mk_output_with_context() {
+    mk_cache_key_json "$_GITDIR" "$_D"/"$1" "$2"
+}
+
 _mk_output() {
-    mk_cache_key_json "$_GITDIR" "$_D"/"$1" ""
+    _mk_output_with_context "$1" ""
 }
 
 test_simplest_module_definition() {
@@ -67,6 +71,13 @@ test_ignored_file() {
 
     test "$output" == "$expected_typical_output" ||
         oops "ignored file changed, expecting the same output"
+}
+
+test_additional_context() {
+    output1=$(_mk_output typical) || oops "_mk_output failed: $output1"
+    output2=$(_mk_output_with_context typical <(echo "hello")) ||
+        oops "_mk_output_with_context failed: $output2"
+    test "$output1" != "$output2" || oops "build context changed, expecting different output"
 }
 
 run_all() {

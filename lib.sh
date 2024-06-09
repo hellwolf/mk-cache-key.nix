@@ -6,12 +6,11 @@ mk_cache_key() {
     [ -d "$gitdir" ]  || { echo "Invalid gitdir: $gitdir": exit 1; }
     [ -e "$modulePath" ] || { echo "Invalid module path: $modulePath"; exit 2; }
     if [ -n "$additionalContextFile" ]; then
-        [ -f "$additionalContextFile" ] || {
+        [ -f "$additionalContextFile" ] || [ -p "$additionalContextFile" ] || {
             echo "Invalid context file: $additionalContextFile";
             exit 3;
         }
-        extraArgs="$extraArgs
-additionalContextFile = $(readlink -f "${additionalContextFile}");"
+        extraArgs="$extraArgs additionalContextFile = ${additionalContextFile};"
     fi
 
     nix eval --file nix/mk-cache-key.nix \
