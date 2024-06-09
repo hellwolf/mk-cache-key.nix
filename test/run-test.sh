@@ -7,7 +7,7 @@ oops() {
 _S="$(readlink -f "${BASH_SOURCE[0]}")"
 _D="$(readlink -f "$(dirname "$_S")")"
 _GITDIR="$_D"/..
-cd "$_GITDIR" || oops "cd to project root folder failed"
+cd "$_D" || oops "cd to project root folder failed"
 
 source "$_D"/../lib.sh
 
@@ -44,7 +44,7 @@ test_cyclical_dependency() {
 }
 
 test_changed_file() {
-    f=./test/typical/test.data
+    f="$_GITDIR"/test/typical/test.data
     echo > "$f"
     output=$(_mk_output typical) || oops "mk_cache_key_json failed"
     git checkout "$f"
@@ -54,7 +54,7 @@ test_changed_file() {
 }
 
 test_changed_dependency_file() {
-    f=./test/typical/test.data
+    f="$_GITDIR"/test/typical/test.data
     echo > "$f"
     output=$(_mk_output cyclical) || oops "mk_cache_key_json failed"
     git checkout "$f"
@@ -64,7 +64,7 @@ test_changed_dependency_file() {
 }
 
 test_ignored_file() {
-    f=./test/typical/src/to-ignore.sh
+    f="$_GITDIR"/test/typical/src/to-ignore.sh
     echo > "$f"
     output=$(_mk_output typical) || oops "mk_cache_key_json failed"
     git checkout "$f"
