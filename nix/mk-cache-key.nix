@@ -1,6 +1,7 @@
 # * Synopsis: Nix expression of creating cache key for "half board" nix projects.
-
+# * License: MIT
 # * Background
+#
 #   Refer to README.md for the backround.
 #
 # * How to use:
@@ -28,17 +29,36 @@
 #   One may also use nix-instantiate to achieve the same result.
 #
 # * Half Board Module Definition
+#
+#   A module is defined as a `halfBoardModule` attribute in default.nix:
+#
 #   ```nix
 #   { halfBoardModule = {
+#       # dependencies to other modules
+#       # default: [ ]
 #       dependencies = [
-#         ../..
-#       ]; # default: [ ]
+#         ../simplest
+#       ];
+#
+#       # outputs of this module
+#       # default: [ ]
 #       outputs = [
-#       ]; # default: [ ]
+#         "out"
+#       ];
+#
+#       # included files, path or string as regex
+#       # default, including all git-tracked files: [ ".*" ]
 #       includedFiles = [
-#       ]; # default, including all git-tracked files: [ ".*" ]
+#         ./src
+#         ".*\\.data$"
+#       ];
+#
+#       # included files, path or string as regex
+#       # default: [ ]
 #       ignoredFiles = [
-#       ]; # default: [ ]
+#         ./src/to-ignore.sh
+#         ".*\\.md$"
+#       ];
 #   };
 #   }
 {

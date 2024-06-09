@@ -26,7 +26,7 @@
         packages.default = defaultPackage;
         apps.default = {
           type = "app";
-          program = defaultPackage.outPath;
+          program = "${defaultPackage.outPath}/bin/mk-cache-key.nix";
         };
       }
     );
