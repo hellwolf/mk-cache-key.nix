@@ -82,6 +82,18 @@ $ nix run github:hellwolf/mk-cache-key.nix -- $PWD ./. "$BUILD_CONTEXT_FILE" --j
 }
 ```
 
+The `hash` and `outputs` of the output can be used as cache key. For example for github cache:
+
+```
+      - name: Lookup Cache
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ steps.hb.outputs.CACHE_OUTPUTS }}
+          key: ${{ steps.hb.outputs.CACHE_KEY }}
+          lookup-only: true
+```
+
 ## Using Flake
 
 The following snippets makes `mk-cache-key.nix` script available in your dev shell:
