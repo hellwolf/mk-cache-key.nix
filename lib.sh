@@ -1,11 +1,13 @@
 # use posix shell type for the library
 # shellcheck shell=sh
 
-# infer dist dir for bash
-# ref: https://stackoverflow.com/questions/5166657/how-do-i-tell-what-type-my-shell-is
-# shellcheck disable=SC3028,SC3054
-if test -n "$BASH_VERSION"; then
-    _MK_CACHE_KEY_NIX_DIST_DIR="$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")"
+if [ -z "$_MK_CACHE_KEY_NIX_DIST_DIR" ]; then
+   # infer dist dir for bash
+   # ref: https://stackoverflow.com/questions/5166657/how-do-i-tell-what-type-my-shell-is
+   # shellcheck disable=SC3028,SC3054
+   if test -n "$BASH_VERSION"; then
+       _MK_CACHE_KEY_NIX_DIST_DIR="$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")"
+   fi
 fi
 # otherwise, user must provider _MK_CACHE_KEY_NIX_DIST_DIR manually
 # ref: https://unix.stackexchange.com/questions/4650/how-to-determine-the-path-to-a-sourced-tcsh-or-bash-shell-script-from-within-the
@@ -17,7 +19,7 @@ mk_cache_key() {
     modulePath="$1"; shift
     additionalContextFile="$1"; shift
 
-    [ -d "$gitdir" ]  || { echo "Invalid gitdir: $gitdir": exit 1; }
+    [ -d "$gitdir" ] || { echo "Invalid gitdir: $gitdir"; exit 1; }
     [ -e "$modulePath" ] || { echo "Invalid module path: $modulePath"; exit 2; }
     if [ -n "$additionalContextFile" ]; then
         [ -f "$additionalContextFile" ] || [ -p "$additionalContextFile" ] || {

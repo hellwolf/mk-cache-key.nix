@@ -80,6 +80,11 @@ test_additional_context() {
     test "$output1" != "$output2" || oops "build context changed, expecting different output"
 }
 
+test_flake_default_app() {
+    output=$(nix run -- ../ "$_GITDIR" "$_D"/typical "" --json)
+    test "$output" == "$expected_typical_output" || oops "nix run failed: $output"
+}
+
 run_all() {
     grep -Eo '^test_[a-zA-Z_]+' "$_S" | while read -r i; do
         if ( "$i" ); then echo "✅ $i"; else echo "❌ $i"; fi
