@@ -2,6 +2,8 @@
 
 A nix expression to make cache keys for "half board" nix projects.
 
+This can be used to calculate keys for build-caches of non-nixified projects.
+
 # Background
 
 ## What Is a "Half Board" Nix Project?
